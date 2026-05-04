@@ -1,0 +1,152 @@
+import numpy as np
+import os
+import matplotlib.pyplot as plt
+
+# ----------------------------
+# USER SETTINGS
+# ----------------------------
+run = 72
+desired_snap = 0
+
+# Change this to your local path
+base_path = rf"D:\ICRAR Studentship Data\Run {run}\GC Data"
+preprocessed_dir = os.path.join(base_path, "preprocessed")
+plots_dir = os.path.join(base_path, "plots")
+os.makedirs(plots_dir, exist_ok=True)
+
+# 50 pc = 0.5 sim units (given your scale)
+R_thr = 5
+
+# Solar ratios used in your existing script
+SOL_MG_FE = 5.15e-4 / 1.17e-3
+SOL_K_FE  = 3.649e-06 / 1.17e-3
+
+# Manual chemical island boxes: (name, MgFe_min, MgFe_max, KFe_min, KFe_max)
+boxes = [
+    ("A",  0.44, 0.62, -0.12, 0.06),
+    ("B",  0.42, 0.52,  0.08, 0.18),
+    ("C",  0.32, 0.44,  0.22, 0.33),
+    ("D",  0.14, 0.33,  0.33, 0.47),
+    ("E", -0.03, 0.05,  0.48, 0.57),
+    ("F", -0.42,-0.34,  0.56, 0.64),
+    ("G", -0.26,-0.16,  0.56, 0.62),
+]
+
+# If you literally want ONLY particles inside boxes, keep this True
+only_inside_boxes = False
+
+# ----------------------------
+# LOAD DATA
+# ----------------------------
+input_path = os.path.join(preprocessed_dir, f"snap_{desired_snap:04d}_gas.npz")
+data = np.load(input_path)
+
+ns_x  = data["ns_x"]
+ns_y  = data["ns_y"]
+ns_z  = data["ns_z"]
+ns_Mg = data["ns_Mg"]
+ns_K  = data["ns_K"]
+ns_Fe = data["ns_Fe"]
+
+# Mass is used for COM. If missing, fall back to equal weights.
+if "ns_m" in data.files:
+    ns_m = data["ns_m"]
+else:
+    ns_m = np.ones_like(ns_x)
+
+# ----------------------------
+# COM SHIFT
+# ----------------------------
+total_m = np.sum(ns_m)
+if total_m <= 0:
+    raise ValueError("Total mass <= 0. Cannot compute COM.")
+
+com_x = np.sum(ns_x * ns_m) / total_m
+com_y = np.sum(ns_y * ns_m) / total_m
+com_z = np.sum(ns_z * ns_m) / total_m
+
+ns_x = ns_x - com_x
+ns_y = ns_y - com_y
+ns_z = ns_z - com_z
+
+# ----------------------------
+# SPATIAL CUT (within 0.5 sim units)
+# ----------------------------
+GC_mask = (ns_x**2 + ns_y**2 + ns_z**2) <= R_thr**2
+
+Mg = ns_Mg[GC_mask]
+K  = ns_K[GC_mask]
+Fe = ns_Fe[GC_mask]
+
+# Valid chemistry
+valid = (Mg > 0) & (K > 0) & (Fe > 0)
+Mg = Mg[valid]
+K  = K[valid]
+Fe = Fe[valid]
+
+if Mg.size == 0:
+    raise ValueError("No valid particles after spatial + chemistry cuts.")
+
+# ----------------------------
+# COMPUTE ABUNDANCES
+# ----------------------------
+Mg_Fe = np.log10(Mg / Fe) - np.log10(SOL_MG_FE)
+K_Fe  = np.log10(K  / Fe) - np.log10(SOL_K_FE)
+
+# ----------------------------
+# LABEL BY BOXES
+# ----------------------------
+labels = np.full(Mg_Fe.shape, "noise", dtype=object)
+for name, mg0, mg1, k0, k1 in boxes:
+    sel = (Mg_Fe >= mg0) & (Mg_Fe <= mg1) & (K_Fe >= k0) & (K_Fe <= k1)
+    labels[sel] = name
+
+if only_inside_boxes:
+    keep = labels != "noise"
+    Mg_Fe = Mg_Fe[keep]
+    K_Fe  = K_Fe[keep]
+    labels = labels[keep]
+
+# ----------------------------
+# PLOT (match the color scheme)
+# ----------------------------
+colors = {
+    "noise": "lightskyblue",
+    "A": "tab:orange",
+    "B": "tab:green",
+    "C": "tab:red",
+    "D": "tab:purple",
+    "E": "tab:brown",
+    "F": "tab:pink",
+    "G": "tab:gray",
+}
+
+order = ["noise", "A", "B", "C", "D", "E", "F", "G"]
+
+plt.figure(figsize=(10, 8))
+
+for lab in order:
+    sel = (labels == lab)
+    if np.any(sel):
+        if lab == "noise":
+            plt.scatter(Mg_Fe[sel], K_Fe[sel], s=12, c=colors[lab], alpha=0.25, label=lab)
+        else:
+            plt.scatter(Mg_Fe[sel], K_Fe[sel], s=28, c=colors[lab], alpha=0.9, label=lab)
+
+plt.xlabel("[Mg/Fe]")
+plt.ylabel("[K/Fe]")
+
+# Requested y-limits
+plt.ylim(-0.2, 1.0)
+
+# Keep x-limits similar to your screenshot (adjust if you want)
+plt.xlim(-0.45, 0.65)
+
+plt.legend(loc="upper right", frameon=True)
+plt.tight_layout()
+
+out_png = os.path.join(plots_dir, f"manual_chemical_islands_snap_{desired_snap:04d}.png")
+plt.savefig(out_png, dpi=300)
+plt.close()
+
+print("Saved:", out_png)
