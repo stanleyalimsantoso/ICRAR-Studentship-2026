@@ -3,7 +3,7 @@ This repository contains an overview of my Summer Studentship project at ICRAR, 
 
 This repository is still a work in progress. I’ve attached my final report, and you can also see a short video about my project on the Pawsey alumni page (check the 2025–2026 interns): https://pawsey.org.au/alumni/
 
-## What I did
+## Project Introduction
 
 The project is about simulating the formation of globular clusters in the early Large Magellanic Cloud, with a focus on NGC 1786. This cluster is interesting because recent observations suggest that it shows a rare Mg-K anticorrelation, where some stars are magnesium-poor but potassium-rich.
 
@@ -12,7 +12,7 @@ The main question is whether this chemical pattern can be reproduced using compu
 In this repo, I will collect the code, figures, and results from the project. The goal is not just to make a simulation that looks nice, but to find model globular clusters that have reasonable physical properties, such as mass and half-mass radius, while also reproducing the observed chemical abundance pattern.
 
 <p align="center">
-  <img src="pictures/Picture1.png" alt="Mg-K anti-correlation plot" width="550">
+  <img src="Pictures/Picture1.png" alt="Mg-K anti-correlation plot" width="550">
 </p>
 
 The physical mechanism behind the Mg-K anti-correlation is still not fully understood. One difficulty is that this pattern is rare, and there are only a small number of observed stars and clusters where this effect has been measured clearly. Because of this, simulations are useful because they let us test whether different enrichment scenarios can actually reproduce the observed chemical abundance pattern.
@@ -22,7 +22,7 @@ One possible explanation is pollution from massive or super-AGB stars. Super-AGB
 If new stars form from gas with different mixtures of pristine material and super-AGB ejecta, they can naturally end up with different Mg and K abundances. Stars forming from more polluted gas would appear Mg-poor and K-rich, while stars forming from less polluted gas would look more chemically normal. This gives a possible way to explain the observed Mg-K anti-correlation in NGC 1786.
 
 <p align="center">
-  <img src="pictures/Picture5.png" alt="visualisation of the sAGB polluter model" width="550">
+  <img src="Pictures/Picture18.png" alt="visualisation of the sAGB polluter model" width="550">
 </p>
 
 But first what are super AGB stars? AGB stars are evolved stars that have already used up the hydrogen in their core. At this stage, the star has a compact core, surrounded by helium-burning and hydrogen-burning shells, with a large outer envelope. The core no longer produces energy in the same way as a normal main-sequence star, so most of the energy comes from these burning shells. The outer envelope is cool, extended, and not strongly bound, which means the star can lose a lot of material through stellar winds.
@@ -32,8 +32,10 @@ Massive AGB stars are simply the higher-mass end of AGB stars. Because they are 
 Super-AGB stars have very hot hydrogen-burning regions, especially through hot bottom burning, where the base of the convective envelope becomes hot enough for proton-capture reactions. In these conditions, magnesium nuclei can capture protons and be converted into heavier elements through the Mg-Al cycle, so the remaining gas becomes lower in magnesium. At even higher temperatures, proton captures involving argon can produce potassium, so the material expelled by the star can become potassium-rich.
 
 <p align="center">
-  <img src="pictures/Picture4.png" alt="diagram of the core of AGB stars" width="550">
+  <img src="Pictures/Picture4.png" alt="diagram of the core of AGB stars" width="550">
 </p>
+
+## Simple Mg-K Polluter Model
 
 Super-AGB stars are useful for this problem because they can reach very high temperatures during hot bottom burning. In this stage, the base of the convective envelope becomes hot enough for proton-capture reactions. Magnesium can be reduced through the Mg-Al cycle, while potassium can be enhanced through high-temperature reactions involving argon. This means the material expelled by super-AGB stars can become Mg-poor and K-rich.
 
@@ -75,10 +77,66 @@ Using these assumed yields, the model gives the following approximate fits:
 | 1321 | 0.016 | 0.207 | 0.43  | 0.15 |
 | 1436 | 0.052 | 0.407 | 0.37  | 0.32 |
 | 1501 | 0.035 | 0.220 | 0.92  | 0.27 |
-| 2310 | 4.220 | 54.600 | -0.28 | 0.54 |
-| 2418 | 4.220 | 54.600 | -0.24 | 0.46 |
+| 2310 | 4.22 | 54.6 | -0.28 | 0.54 |
+| 2418 | 4.22 | 54.6 | -0.24 | 0.46 |
 
 The first four stars can be explained reasonably well with the super-AGB pollution model. The last two stars can also be reproduced by the two-step model, but only by using a very high massive-AGB-to-GMC mass ratio. This is probably not physically ideal, but it is still useful because it shows that the polluter model is worth investigating further. It also suggests that the assumed yields may need to be improved or fine-tuned.
 
+The first model that success. The GC consists of clumps that are still merging. This GC has half mass radius of ~20pc(including clumps)
+We qualitatively show that the chemical abundance pattern, but we want to be sure that this is a consequence of sAGB pollution. this one using theoretical yield rates of  m=5-6 Msun from Ventura 2013 yields m=6-10Msun from Ventura 2012 Yields sAGB stars only. The main thing that changes the anticorrelation pattern should just be the total mass of the super agb stars. so we will find different globular clusters with different ration of M_sAGB/M_GC after this one
 
+
+## First Successful Model
+
+This is the first model that managed to reproduce the Mg-K anti-correlation qualitatively. The globular cluster is still forming and consists of several clumps that are still merging together. Because of this, the half-mass radius is still quite large, around ~20 pc when the clumps are included.
+
+For this model, I used theoretical AGB yield rates from Ventura et al. The yields include massive AGB stars with masses \(5-6M_\odot\) from Ventura et al. 2013, and super-AGB stars with masses \(6-10M_\odot\) from Ventura et al. 2012.
+
+The chemical abundance pattern appears in the simulation, but this alone is not enough to prove that it is caused by super-AGB pollution. To check this, I compared different globular clusters from the same galaxy simulation with different values of \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}}\). If the polluter model is right, clusters with more super-AGB ejecta compared to their cluster mass should show a stronger Mg-K anti-correlation, while clusters with little or no super-AGB material should show a weaker pattern or no pattern at all.
+
+<p align="center">
+  <img src="Pictures/Picture6.png" alt="Surface density plot of the globular cluster" width="45%">
+  <img src="Pictures/Picture5.png" alt="Mg-K anticorrelation plot for the globular cluster" width="45%">
+</p>
+
+<p align="center">
+  <em>Left: surface density of the forming globular cluster. Right: the corresponding Mg-K abundance pattern.</em>
+</p>
+
+The results follow this expectation. The cluster with high \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}}\) shows a clear chemical abundance pattern. The cluster with lower \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}}\) still shows the pattern, but it is less prominent. The cluster with no nearby super-AGB material does not reproduce the Mg-K anti-correlation.
+
+<p align="center">
+  <img src="Pictures/Picture7.png" alt="Mg-K abundance pattern for a GC with high super-AGB pollution" width="550">
+</p>
+
+<p align="center">
+  <em>
+  High super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 5.3625\), 
+  \(M(&lt;20\,\mathrm{pc}) = 3.576154 \times 10^5 M_\odot\), and half-mass radius \(= 8.12\,\mathrm{pc}\).
+  </em>
+</p>
+
+<p align="center">
+  <img src="Pictures/Picture8.png" alt="Mg-K abundance pattern for a GC with lower super-AGB pollution" width="550">
+</p>
+
+<p align="center">
+  <em>
+  Lower super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 0.9385\), 
+  \(M(&lt;20\,\mathrm{pc}) = 3.428711 \times 10^5 M_\odot\), and half-mass radius \(= 12.73\,\mathrm{pc}\).
+  </em>
+</p>
+
+<p align="center">
+  <img src="Pictures/Picture9.png" alt="Mg-K abundance pattern for a GC with no nearby super-AGB pollution" width="550">
+</p>
+
+<p align="center">
+  <em>
+  No super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 0.000\), 
+  \(M(&lt;50\,\mathrm{pc}) = 1.099800 \times 10^5 M_\odot\), and half-mass radius \(= 13.94\,\mathrm{pc}\).
+  </em>
+</p>
+
+This suggests that the Mg-K anti-correlation is not just appearing randomly in the simulation. It becomes stronger when there is more super-AGB material available, and disappears when there is no nearby super-AGB pollution. This gives us more confidence that the abundance pattern is connected to super-AGB enrichment rather than only the general dynamics of the galaxy simulation.
 
