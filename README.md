@@ -103,7 +103,7 @@ The chemical abundance pattern appears in the simulation, but this alone is not 
   <em>Left: surface density of the forming globular cluster. Right: the corresponding Mg-K abundance pattern.</em>
 </p>
 
-The results follow this expectation. The cluster with high \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}}\) shows a clear chemical abundance pattern. The cluster with lower \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}}\) still shows the pattern, but it is less prominent. The cluster with no nearby super-AGB material does not reproduce the Mg-K anti-correlation.
+The results follow this expectation. The cluster with high $M_{\mathrm{sAGB}}/M_{\mathrm{GC}}$ shows a clear chemical abundance pattern. The cluster with lower $M_{\mathrm{sAGB}}/M_{\mathrm{GC}}$ still shows the pattern, but it is less prominent. The cluster with no nearby super-AGB material does not reproduce the Mg-K anti-correlation.
 
 <p align="center">
   <img src="Pictures/Picture7.png" alt="Mg-K abundance pattern for a GC with high super-AGB pollution" width="550">
@@ -111,8 +111,8 @@ The results follow this expectation. The cluster with high \(M_{\mathrm{sAGB}}/M
 
 <p align="center">
   <em>
-  High super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 5.3625\), 
-  \(M(&lt;20\,\mathrm{pc}) = 3.576154 \times 10^5 M_\odot\), and half-mass radius \(= 8.12\,\mathrm{pc}\).
+  High super-AGB pollution case. This GC has M_sAGB/M_GC = 5.3625, 
+  M(&lt;20 pc) = 3.576154 × 10^5 Msun, and half-mass radius = 8.12 pc.
   </em>
 </p>
 
@@ -122,8 +122,8 @@ The results follow this expectation. The cluster with high \(M_{\mathrm{sAGB}}/M
 
 <p align="center">
   <em>
-  Lower super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 0.9385\), 
-  \(M(&lt;20\,\mathrm{pc}) = 3.428711 \times 10^5 M_\odot\), and half-mass radius \(= 12.73\,\mathrm{pc}\).
+  Lower super-AGB pollution case. This GC has M_sAGB/M_GC = 0.9385, 
+  M(&lt;20 pc) = 3.428711 × 10^5 Msun, and half-mass radius = 12.73 pc.
   </em>
 </p>
 
@@ -133,10 +133,8 @@ The results follow this expectation. The cluster with high \(M_{\mathrm{sAGB}}/M
 
 <p align="center">
   <em>
-  No super-AGB pollution case. This GC has \(M_{\mathrm{sAGB}}/M_{\mathrm{GC}} = 0.000\), 
-  \(M(&lt;50\,\mathrm{pc}) = 1.099800 \times 10^5 M_\odot\), and half-mass radius \(= 13.94\,\mathrm{pc}\).
+  No super-AGB pollution case. This GC has M_sAGB/M_GC = 0.000, 
+  M(&lt;50 pc) = 1.099800 × 10^5 Msun, and half-mass radius = 13.94 pc.
   </em>
 </p>
-
-This suggests that the Mg-K anti-correlation is not just appearing randomly in the simulation. It becomes stronger when there is more super-AGB material available, and disappears when there is no nearby super-AGB pollution. This gives us more confidence that the abundance pattern is connected to super-AGB enrichment rather than only the general dynamics of the galaxy simulation.
 
