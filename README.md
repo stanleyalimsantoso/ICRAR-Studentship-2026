@@ -5,12 +5,12 @@ This repository is still a work in progress. I’ve attached my final report, an
 
 ## What I’m doing
 
-Recent observations reported that NGC 1786 shows the rare Mg–K anticorrelation pattern: https://doi.org/10.1051/0004-6361/202556737  
-The mechanism behind this anticorrelation is still debated. My goal is to run computer simulations to reproduce the observed Mg–K anticorrelation pattern in NGC 1786 and identify a model globular cluster with similar physical characteristics. The simulations are based on Bekki (2013): https://doi.org/10.1093/mnras/stt589
+The project is about simulating the formation of globular clusters in the early Large Magellanic Cloud, with a focus on NGC 1786. This cluster is interesting because recent observations suggest that it shows a rare Mg-K anticorrelation, where some stars are magnesium-poor but potassium-rich.
 
-## Status (WIP)
+The main question is whether this chemical pattern can be reproduced using computer simulations. The idea I am testing is that massive or super-AGB stars may have polluted nearby gas with material that is low in magnesium and high in potassium. If later stars formed from different mixtures of this polluted gas and normal gas, this could explain the Mg-K anticorrelation.
 
-To do:
-- Upload code
-- Upload results
-- Add explanation and discussion
+In this repo, I will collect the code, figures, and results from the project. The goal is not just to make a simulation that looks nice, but to find model globular clusters that have reasonable physical properties, such as mass and half-mass radius, while also reproducing the observed chemical abundance pattern.
+
+<p align="center">
+  <img src="images/mgk_plot.png" alt="Mg-K anti-correlation plot" width="550">
+</p>
